@@ -300,7 +300,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (planData && planData.plan_data && planData.plan_data.event) {
             console.log("Plan encontrado:", planData.plan_data.event);
-            appState = { ...appState, ...planData.plan_data };
+            // Migración/Actualización para planes antiguos
+            const updatedPlan = {
+                ...planData.plan_data,
+                startDateStr: planData.plan_data.startDateStr || getLocalIsoDate(new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)), // Default 30 días atrás
+                compName: planData.plan_data.compName || "Competencia",
+                measurements: appState.measurements || []
+            };
+            appState = { ...appState, ...updatedPlan };
         } else {
             console.log("El usuario no tiene un plan activo.");
         }
