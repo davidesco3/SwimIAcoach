@@ -1,0 +1,933 @@
+:root {
+    --bg-dark: #0b1120;
+    --bg-accent: #1e293b;
+    --primary: #0ea5e9;
+    --primary-hover: #0284c7;
+    --secondary: #38bdf8;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --glass-bg: rgba(30, 41, 59, 0.6);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --gym-color: #f59e0b;
+    --pool-color: #06b6d4;
+    --success: #10b981;
+    --font-family: 'Outfit', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    line-height: 1.5;
+    background-image: 
+        radial-gradient(circle at 15% 50%, rgba(14, 165, 233, 0.15), transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(56, 189, 248, 0.1), transparent 25%);
+    background-attachment: fixed;
+    min-height: 100vh;
+}
+
+/* Utilities */
+.hidden { display: none !important; }
+.view { display: none; opacity: 0; transition: opacity 0.4s ease; }
+.view.active { display: block; opacity: 1; }
+
+.glass-panel {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+.app-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 16px;
+    padding-bottom: 80px; /* Space for scrolling */
+}
+
+/* Header */
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0 32px 0;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--primary);
+}
+
+.logo-link {
+    text-decoration: none;
+    color: inherit;
+    transition: opacity 0.2s ease;
+}
+
+.logo-link:hover {
+    opacity: 0.8;
+}
+
+.logo h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-main);
+    letter-spacing: -0.5px;
+}
+
+.icon-btn {
+    background: transparent;
+    border: 1px solid var(--glass-border);
+    color: var(--text-muted);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.icon-btn:hover {
+    color: var(--text-main);
+    background: var(--bg-accent);
+}
+
+/* Form View */
+.intro-text {
+    margin-bottom: 24px;
+}
+
+.intro-text h2 {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, #fff, #94a3b8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.intro-text p {
+    color: var(--text-muted);
+    font-size: 1rem;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-row {
+    display: flex;
+    gap: 16px;
+}
+
+.form-row .form-group {
+    flex: 1;
+}
+
+label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
+input, select {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid var(--glass-border);
+    color: var(--text-main);
+    font-family: var(--font-family);
+    font-size: 1rem;
+    padding: 12px 16px;
+    border-radius: 12px;
+    outline: none;
+    transition: all 0.2s ease;
+    width: 100%;
+}
+
+input:focus, select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.2);
+}
+
+/* Color icon fix for date input on webkit */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    opacity: 0.6;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary), #0284c7);
+    color: white;
+    border: none;
+    padding: 16px;
+    border-radius: 12px;
+    font-family: var(--font-family);
+    font-size: 1rem;
+    font-weight: 600;
+    width: 100%;
+    cursor: pointer;
+    margin-top: 16px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 14px rgba(14, 165, 233, 0.3);
+}
+
+.btn-primary:active {
+    transform: scale(0.98);
+}
+
+/* Dashboard View */
+.dashboard-header {
+    margin-bottom: 24px;
+    text-align: center;
+}
+
+#dash-event {
+    font-size: 1.75rem;
+    margin-bottom: 16px;
+}
+
+.time-progress {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    padding: 16px;
+    border-radius: 16px;
+}
+
+.time-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.time-box .label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.time-box .value {
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.time-box.target .value {
+    color: var(--success);
+}
+
+.progress-arrow {
+    color: var(--text-muted);
+    opacity: 0.5;
+}
+
+/* Cycle Info */
+.cycle-info {
+    margin-bottom: 24px;
+}
+
+.cycle-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.cycle-header h3 {
+    font-size: 1.1rem;
+}
+
+.badge {
+    background: rgba(14, 165, 233, 0.15);
+    color: var(--secondary);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.badge.intensity {
+    background: rgba(245, 158, 11, 0.15);
+    color: var(--gym-color);
+}
+
+.cycle-details {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.detail-item .label {
+    color: var(--text-muted);
+}
+
+.detail-item .value {
+    font-weight: 500;
+    text-align: right;
+}
+
+/* Vertical Swimming Pool Visualization */
+.vertical-pool-wrapper {
+    margin-top: 40px;
+    display: flex;
+    align-items: flex-start;
+    gap: 32px;
+    padding: 0 20px;
+    position: relative;
+    height: 400px;
+}
+
+.pool-v-container {
+    width: 200px; /* Even wider pool - double the previous width */
+    height: 350px;
+    background: #0ea5e9;
+    border: 6px solid #f8fafc;
+    border-radius: 16px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: inset 0 8px 20px rgba(0,0,0,0.4), 0 12px 30px rgba(0,0,0,0.2);
+}
+
+.pool-v-water {
+    height: 100%;
+    width: 100%;
+    background-image: 
+        linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px);
+    background-size: 25px 25px; /* Bigger tiles for wider pool */
+    position: relative;
+}
+
+.pool-v-lanes {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 4px;
+    height: 100%;
+    background: repeating-linear-gradient(0deg, #fff 0, #fff 15px, transparent 15px, transparent 30px);
+    opacity: 0.5;
+    transform: translateX(-50%);
+}
+
+.pool-v-stages {
+    display: flex;
+    flex-direction: column-reverse;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.pool-v-stage-zone {
+    width: 100%;
+    opacity: 0.5;
+    border-top: 2px solid rgba(255,255,255,0.3);
+}
+
+.pool-v-stage-zone:first-child {
+    border-top: none;
+}
+
+.swimmer-v-indicator {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translate(-50%, 50%);
+    z-index: 30;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: bottom 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.swimmer-v-icon {
+    font-size: 40px;
+    /* Flip rotation to 90deg to ensure it faces UP on this system */
+    transform: rotate(90deg); 
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+    animation: swimStrokeV 2s infinite ease-in-out;
+}
+
+@keyframes swimStrokeV {
+    0%, 100% { transform: rotate(90deg) translateX(0); }
+    50% { transform: rotate(90deg) translateX(8px); }
+}
+
+.swimmer-v-label {
+    font-size: 0.6rem;
+    font-weight: 900;
+    background: #fff;
+    color: #0369a1;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-top: 6px;
+    text-transform: uppercase;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.pool-v-finish-line {
+    position: absolute;
+    top: -30px;
+    left: 20px;
+    font-size: 0.8rem;
+    font-weight: 900;
+    color: #fff;
+    background: #ef4444;
+    padding: 6px 14px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+    z-index: 40;
+}
+
+/* Fix for overlapping labels: use a flex column with min-height */
+.pool-v-labels-container {
+    flex: 1;
+    height: 350px;
+    display: flex;
+    flex-direction: column-reverse; /* Match pool order */
+    justify-content: flex-start;
+    padding-top: 10px;
+}
+
+.pool-v-label-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 16px;
+    border-left: 3px solid var(--glass-border);
+    margin-bottom: 10px;
+    min-height: 50px; /* Prevent overlap */
+    transition: all 0.3s ease;
+}
+
+.pool-v-label-item .v-label-name {
+    font-size: 0.9rem;
+    font-weight: 900;
+    color: var(--text-main);
+    text-transform: uppercase;
+}
+
+.pool-v-label-item .v-label-days {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.bg-base { background-color: #2563eb; }
+.bg-desarrollo { background-color: #9333ea; }
+.bg-velocidad { background-color: #dc2626; }
+.bg-tapering { background-color: #059669; }
+
+/* App Navigation Tabs */
+.app-nav {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding: 0 20px;
+}
+
+.app-nav.hidden { display: none; }
+
+.nav-item {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    color: var(--text-muted);
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.nav-item.active {
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
+    box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+}
+
+.nav-item.hidden { display: none; }
+
+/* Swimmer Table */
+.swimmer-table-wrapper {
+    overflow-x: auto;
+    margin-top: 15px;
+}
+
+.swimmer-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.swimmer-table th {
+    padding: 12px;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.swimmer-table td {
+    padding: 16px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    font-size: 0.9rem;
+}
+
+.form-note {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 10px;
+    font-style: italic;
+}
+
+.status-badge {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.status-active { background: rgba(16, 185, 129, 0.15); color: var(--success); }
+.status-pending { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+
+/* Admin View specific display logic */
+#view-admin.view { display: none; }
+#view-admin.view.active { display: block; }
+
+/* Progress Section & Charts */
+.progress-section {
+    margin-top: 24px;
+    padding: 20px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.btn-text {
+    background: transparent;
+    border: none;
+    color: var(--primary);
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.btn-text:hover {
+    background: rgba(14, 165, 233, 0.1);
+}
+
+.chart-container {
+    height: 250px;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.hidden-form {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 16px;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    border: 1px solid var(--glass-border);
+}
+
+.hidden-form.hidden {
+    display: none;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.btn-sm {
+    padding: 8px 16px;
+    font-size: 0.85rem;
+}
+
+.measurements-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.measure-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 14px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 10px;
+    font-size: 0.9rem;
+}
+
+.measure-item .date {
+    color: var(--text-muted);
+}
+
+.measure-item .time {
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+/* Full Month Calendar */
+.calendar-section {
+    margin-top: 24px;
+    padding: 16px;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.calendar-header h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-transform: capitalize;
+    color: var(--text-main);
+}
+
+.cal-nav-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    color: var(--text-main);
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: all 0.2s ease;
+}
+
+.cal-nav-btn:active {
+    transform: scale(0.9);
+    background: var(--primary);
+}
+
+.calendar-days-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    font-size: 0.6rem;
+    font-weight: 800;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+}
+
+.cal-day {
+    aspect-ratio: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid transparent;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    min-height: 48px;
+}
+
+.cal-day.other-month {
+    opacity: 0.15;
+    pointer-events: none;
+}
+
+.cal-day.today {
+    background: rgba(14, 165, 233, 0.1);
+    border-color: rgba(14, 165, 233, 0.3);
+}
+
+.cal-day.today .day-num {
+    color: var(--primary);
+}
+
+.header-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.user-email {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-right: 8px;
+}
+
+.auth-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+#view-auth.view {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 70vh;
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    color: var(--text-main);
+    padding: 14px;
+    border-radius: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.cal-day.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    box-shadow: 0 4px 15px rgba(14, 165, 233, 0.4);
+}
+
+.cal-day.active .day-num {
+    color: white;
+}
+
+.cal-day .day-num {
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.cal-day .indicators {
+    display: flex;
+    gap: 3px;
+    margin-top: 2px;
+}
+
+.cal-day .dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+}
+
+.cal-day .dot.gym { background-color: #f59e0b; }
+.cal-day .dot.pool { background-color: #0ea5e9; }
+
+.cal-day.active .dot {
+    background-color: white;
+    opacity: 0.8;
+}
+
+/* Daily Plan */
+.daily-plan {
+    animation: slideUp 0.4s ease;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.plan-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.plan-header h3 {
+    font-size: 1.25rem;
+}
+
+.workout-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.workout-card {
+    display: flex;
+    gap: 16px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    padding: 16px;
+    border-radius: 16px;
+    align-items: flex-start;
+}
+
+.workout-card.gym {
+    border-left: 4px solid var(--gym-color);
+}
+
+.workout-card.pool {
+    border-left: 4px solid var(--pool-color);
+}
+
+.card-icon {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 12px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.workout-card.gym .card-icon { color: var(--gym-color); }
+.workout-card.pool .card-icon { color: var(--pool-color); }
+
+.card-content h4 {
+    margin-bottom: 8px;
+    font-size: 1.15rem;
+    color: var(--text-main);
+    font-weight: 700;
+}
+
+.card-content p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    white-space: pre-line; /* Essential for showing line breaks in descriptions */
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Responsive constraints */
+@media (min-width: 600px) {
+    .app-container {
+        margin-top: 5vh;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+    .app-container {
+        padding: 12px;
+    }
+    
+    .intro-text h2 {
+        font-size: 1.75rem;
+    }
+    
+    .time-progress {
+        gap: 12px;
+        padding: 12px;
+    }
+    
+    .time-box .value {
+        font-size: 1.1rem;
+    }
+    
+    .vertical-pool-wrapper {
+        gap: 16px;
+        padding: 0 10px;
+        height: 350px;
+    }
+    
+    .pool-v-container {
+        width: 140px;
+        height: 300px;
+    }
+    
+    .pool-v-labels-container {
+        height: 300px;
+    }
+    
+    .pool-v-label-item .v-label-name {
+        font-size: 0.75rem;
+    }
+    
+    .calendar-grid {
+        gap: 4px;
+    }
+    
+    .cal-day {
+        min-height: 40px;
+        border-radius: 8px;
+    }
+    
+    .cal-day .day-num {
+        font-size: 0.9rem;
+    }
+    
+    .app-nav {
+        padding: 0 10px;
+        gap: 6px;
+    }
+    
+    .nav-item {
+        padding: 8px 12px;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 360px) {
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+    
+    .time-progress {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .progress-arrow {
+        transform: rotate(90deg);
+    }
+}

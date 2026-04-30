@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SwimIA Coach</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- Supabase Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- HEADER -->
+        <header class="app-header">
+            <a href="landing.html" class="logo-link">
+                <div class="logo">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M2 12C2 12 5 15 12 15C19 15 22 12 22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M2 17C2 17 5 20 12 20C19 20 22 17 22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 9C13.6569 9 15 7.65685 15 6C15 4.34315 13.6569 3 12 3C10.3431 3 9 4.34315 9 6C9 7.65685 10.3431 9 12 9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <h1>SwimIA Coach</h1>
+                </div>
+            </a>
+            <div class="header-actions">
+                <span id="user-display" class="user-email"></span>
+                <button id="btn-reset" class="icon-btn hidden" title="Reiniciar Plan">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                        <path d="M3 3v5h5"></path>
+                    </svg>
+                </button>
+                <button id="btn-logout" class="icon-btn hidden" title="Cerrar Sesión">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- APP NAVIGATION (Only for logged users) -->
+        <nav id="app-nav" class="app-nav hidden">
+            <button id="nav-coach" class="nav-item active">Mi Plan</button>
+            <button id="nav-admin" class="nav-item hidden">Panel Admin</button>
+        </nav>
+
+        <!-- VIEW: AUTH -->
+        <main id="view-auth" class="view active">
+            <div class="intro-text">
+                <h2>Bienvenido, Nadador</h2>
+                <p>Ingresa para guardar tu progreso y llevar tu plan de entrenamiento a todos lados.</p>
+            </div>
+            <form id="auth-form" class="glass-panel">
+                <div class="form-group">
+                    <label for="auth-email">Correo Electrónico</label>
+                    <input type="email" id="auth-email" placeholder="tu@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="auth-password">Contraseña</label>
+                    <input type="password" id="auth-password" placeholder="••••••••" required>
+                </div>
+                <div class="auth-buttons">
+                    <button type="submit" id="btn-login" class="btn-primary">Iniciar Sesión</button>
+                    <button type="submit" id="btn-signup" class="btn-secondary">Crear Cuenta</button>
+                </div>
+            </form>
+        </main>
+
+        <!-- VIEW: SETUP FORM -->
+        <main id="view-setup" class="view">
+            <div class="intro-text">
+                <h2>Alcanza tu mejor nivel</h2>
+                <p>Configura tu próximo objetivo y dejaré listo tu plan de entrenamiento personalizado.</p>
+            </div>
+
+            <form id="setup-form" class="glass-panel">
+                <div class="form-group">
+                    <label for="event-select">Prueba a enfocar</label>
+                    <select id="event-select" required>
+                        <option value="" disabled selected>Selecciona una prueba...</option>
+                        
+                        <!-- LIBRE / CROL -->
+                        <optgroup label="Libre / Crol">
+                            <option value="25m Libre">25m Libre</option>
+                            <option value="50m Libre">50m Libre</option>
+                            <option value="100m Libre">100m Libre</option>
+                            <option value="200m Libre">200m Libre</option>
+                            <option value="400m Libre">400m Libre</option>
+                            <option value="800m Libre">800m Libre</option>
+                            <option value="1500m Libre">1500m Libre</option>
+                            <option value="3000m Libre">3000m Libre</option>
+                            <option value="5000m Libre">5000m Libre</option>
+                            <option value="10000m Libre">10000m Libre</option>
+                        </optgroup>
+
+                        <!-- MARIPOSA -->
+                        <optgroup label="Mariposa">
+                            <option value="25m Mariposa">25m Mariposa</option>
+                            <option value="50m Mariposa">50m Mariposa</option>
+                            <option value="100m Mariposa">100m Mariposa</option>
+                            <option value="200m Mariposa">200m Mariposa</option>
+                        </optgroup>
+
+                        <!-- ESPALDA -->
+                        <optgroup label="Espalda">
+                            <option value="25m Espalda">25m Espalda</option>
+                            <option value="50m Espalda">50m Espalda</option>
+                            <option value="100m Espalda">100m Espalda</option>
+                            <option value="200m Espalda">200m Espalda</option>
+                        </optgroup>
+
+                        <!-- PECHO -->
+                        <optgroup label="Pecho">
+                            <option value="25m Pecho">25m Pecho</option>
+                            <option value="50m Pecho">50m Pecho</option>
+                            <option value="100m Pecho">100m Pecho</option>
+                            <option value="200m Pecho">200m Pecho</option>
+                        </optgroup>
+
+                        <!-- COMBINADO -->
+                        <optgroup label="Combinado (IM)">
+                            <option value="100m Combinado">100m Combinado</option>
+                            <option value="200m Combinado">200m Combinado</option>
+                            <option value="400m Combinado">400m Combinado</option>
+                        </optgroup>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="comp-name">Nombre de la Competencia</label>
+                    <input type="text" id="comp-name" placeholder="Ej: Nacional Interclubes" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="target-date">Fecha de Competencia Objetivo</label>
+                    <input type="date" id="target-date" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="current-time">Tiempo Actual</label>
+                        <input type="text" id="current-time" placeholder="Ej: 00:26.50" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="target-time">Tiempo Deseado</label>
+                        <input type="text" id="target-time" placeholder="Ej: 00:25.00" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary">Generar Plan de Entrenamiento</button>
+            </form>
+        </main>
+
+        <!-- VIEW: DASHBOARD -->
+        <main id="view-dashboard" class="view">
+            <div class="dashboard-header">
+                <h2 id="dash-event">50m Libre</h2>
+                <div class="time-progress">
+                    <div class="time-box">
+                        <span class="label">Actual</span>
+                        <span class="value" id="dash-current">--</span>
+                    </div>
+                    <div class="progress-arrow">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </div>
+                    <div class="time-box target">
+                        <span class="label">Deseado</span>
+                        <span class="value" id="dash-target">--</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CYCLE INFO -->
+            <section class="cycle-info glass-panel">
+                <div class="cycle-header">
+                    <h3>Ciclo Actual</h3>
+                    <span class="badge" id="dash-days-left">0 días restantes</span>
+                </div>
+                <div class="cycle-details">
+                    <div class="detail-item">
+                        <span class="label">Etapa</span>
+                        <span class="value highlight" id="dash-stage">Base Aeróbica</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="label">Foco Principal</span>
+                        <span class="value" id="dash-focus">Técnica y resistencia</span>
+                    </div>
+                </div>
+
+                <!-- VERTICAL SWIMMING POOL VISUALIZATION -->
+                <div class="vertical-pool-wrapper">
+                    <div class="pool-v-container" id="pool-v-container">
+                        <div class="pool-v-water">
+                            <div class="pool-v-lanes"></div>
+                            <div class="pool-v-stages" id="pool-v-stages"></div>
+                            <div class="swimmer-v-indicator" id="swimmer-v-indicator">
+                                <div class="swimmer-v-icon">🏊‍♂️</div>
+                                <div class="swimmer-v-label">Tú</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pool-v-labels-container" id="pool-v-labels-container"></div>
+                    <div class="pool-v-finish-line" id="pool-v-meta">🏁 META</div>
+                </div>
+            </section>
+
+            <!-- PROGRESS CHART SECTION -->
+            <section class="progress-section glass-panel">
+                <div class="section-header">
+                    <h3>Progreso de Tiempos</h3>
+                    <button id="btn-toggle-measure" class="btn-text">+ Agregar Medición</button>
+                </div>
+                
+                <div class="chart-container">
+                    <canvas id="progressChart"></canvas>
+                </div>
+
+                <!-- ADD MEASUREMENT FORM (HIDDEN BY DEFAULT) -->
+                <form id="measurement-form" class="hidden-form hidden">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Fecha</label>
+                            <input type="date" id="measure-date" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Tiempo (MM:SS.CC)</label>
+                            <input type="text" id="measure-time" placeholder="00:26.10" required>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary btn-sm">Guardar</button>
+                        <button type="button" id="btn-cancel-measure" class="btn-text">Cancelar</button>
+                    </div>
+                </form>
+
+                <div class="measurements-list" id="measurements-list">
+                    <!-- History will appear here -->
+                </div>
+            </section>
+
+            <!-- CALENDAR SECTION -->
+            <section class="calendar-section glass-panel">
+                <div class="calendar-header">
+                    <button id="cal-prev" class="cal-nav-btn">&lt;</button>
+                    <h3 id="cal-month-year">Abril 2026</h3>
+                    <button id="cal-next" class="cal-nav-btn">&gt;</button>
+                </div>
+                <div class="calendar-days-header">
+                    <span>DOM</span><span>LUN</span><span>MAR</span><span>MIE</span><span>JUE</span><span>VIE</span><span>SAB</span>
+                </div>
+                <div class="calendar-grid" id="calendar-grid">
+                    <!-- Days will be generated by JS -->
+                </div>
+            </section>
+
+            <!-- DAILY PLAN -->
+            <section class="daily-plan" id="daily-plan">
+                <div class="plan-header">
+                    <h3 id="plan-date-title">Hoy</h3>
+                    <span class="badge intensity" id="plan-intensity">Intensidad: Media</span>
+                </div>
+                
+                <div class="workout-cards">
+                    <div class="workout-card gym">
+                        <div class="card-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M6.5 6.5h11M6.5 17.5h11M4 6.5v11M20 6.5v11M2 9v6M22 9v6"/>
+                            </svg>
+                        </div>
+                        <div class="card-content">
+                            <h4>Gimnasio</h4>
+                            <p id="plan-gym-desc">Fuerza general, trabajo de core y estabilidad.</p>
+                        </div>
+                    </div>
+
+                    <div class="workout-card pool">
+                        <div class="card-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M2 12h20M4 16h16M6 20h12M8 8h8M10 4h4"/>
+                            </svg>
+                        </div>
+                        <div class="card-content">
+                            <h4>Piscina</h4>
+                            <p id="plan-pool-desc">Calentamiento 800m. 10x100m Libre (Z2). Vuelta a la calma 200m.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- VIEW: ADMIN PANEL -->
+        <main id="view-admin" class="view">
+            <div class="intro-text">
+                <h2>Administración de Nadadores</h2>
+                <p>Crea nuevos perfiles y supervisa el progreso de tus nadadores.</p>
+            </div>
+
+            <!-- CREATE SWIMMER FORM -->
+            <section class="glass-panel">
+                <h3>+ Registrar Nuevo Nadador</h3>
+                <form id="create-swimmer-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="swimmer-name">Nombre Completo</label>
+                            <input type="text" id="swimmer-name" placeholder="Ej: Juan Perez" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="swimmer-email">Correo Electrónico</label>
+                            <input type="email" id="swimmer-email" placeholder="swimmer@email.com" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="swimmer-pass">Contraseña Temporal</label>
+                            <input type="password" id="swimmer-pass" placeholder="••••••••" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-primary">Registrar Nadador</button>
+                    <p class="form-note">Nota: El nadador podrá cambiar su contraseña al ingresar por primera vez.</p>
+                </form>
+            </section>
+
+            <!-- SWIMMER LIST -->
+            <section class="glass-panel">
+                <h3>Lista de Nadadores</h3>
+                <div class="swimmer-table-wrapper">
+                    <table class="swimmer-table">
+                        <thead>
+                            <tr>
+                                <th>Nadador</th>
+                                <th>Email</th>
+                                <th>Estado Plan</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="swimmer-list-body">
+                            <!-- JS will populate this -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
