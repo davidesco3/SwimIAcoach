@@ -174,16 +174,19 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     background: linear-gradient(135deg, var(--primary), #0284c7);
     color: white;
     border: none;
-    padding: 16px;
+    padding: 14px;
     border-radius: 12px;
     font-family: var(--font-family);
     font-size: 1rem;
     font-weight: 600;
     width: 100%;
     cursor: pointer;
-    margin-top: 16px;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     box-shadow: 0 4px 14px rgba(14, 165, 233, 0.3);
+}
+
+form > .btn-primary {
+    margin-top: 16px;
 }
 
 .btn-primary:active {
@@ -725,7 +728,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     border: 1px solid var(--glass-border);
     color: var(--text-main);
     padding: 14px;
-    border-radius: 14px;
+    border-radius: 12px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
